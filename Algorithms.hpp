@@ -10,25 +10,20 @@ namespace ariel {
     // Declare the Algorithms namespace or class
     class Algorithms {
     public:
-    static bool isConnected(const Graph& g);
+    static bool isConnected(const Graph& graph);
     static std::string shortestPath(Graph& graph, int start, int end) ;
-    static std::string isBipartite(const Graph& g) ;
-    // static std::pair<bool, std::vector<int>> isContainsCycle( Graph& g);
-    static void printisContainsCycle(Graph& g);
-    static bool isContainsCycle(const Graph& g);
-    static void negativeCycle(const Graph& g) ;
+    static std::string isBipartite(const Graph& graph) ;
+    static bool isContainsCycle(const Graph& graph);
+    static std::string negativeCycle(const Graph& graph);
 
     private:
     static void dfs(const std::vector<std::vector<int> >&, std::vector<bool>&, int);
-    static bool dfss( Graph& g, int u, std::vector<int>& parent, std::unordered_set<int>& visited, std::vector<int>& cycle);
-    static void DFS(const Graph& g, size_t node, std::vector<bool>& visited);
-    static bool isCyclicUtil(size_t v, std::vector<bool>& visited, std::vector<bool>& recStack, std::vector<size_t >& parent, const Graph& g, std::vector<size_t>& cycle);  
-    static bool bellmanFord(const Graph& g, std::vector<size_t>& dist);
+    static bool dss( Graph& g, int u, std::vector<int>& parent, std::unordered_set<int>& visited, std::vector<int>& cycle);
+    static bool isCyclic(std::vector<bool>& visited,size_t v,  std::vector<bool>& recStack, std::vector<size_t >& parent, const Graph& g, std::vector<size_t>& cycle);  
 
     };
 }
 
-        // Declare functions or members here
  
 
 #endif /* ALGORITHMS_HPP */
