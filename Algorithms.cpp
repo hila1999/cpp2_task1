@@ -10,169 +10,103 @@
 #include <cstddef> // for SIZE_MAX
 using namespace std;
 using namespace ariel;
-    void Algorithms::dfs(const std::vector<std::vector<int>>& adjacencyMatrix, std::vector<bool>& visited, int vertex) {
+    void Algorithms::dfs(const vector<std::vector<int>>& adjacencyMatrix, vector<bool>& visited, int vertex) {
         visited[static_cast<std::vector<bool>::size_type>(vertex)] = true; // Mark the current vertex as visited
-        for (std::size_t i = 0; i < adjacencyMatrix[static_cast<std::vector<std::vector<int>>::size_type>(vertex)].size(); ++i) {
-            if (adjacencyMatrix[static_cast<std::vector<std::vector<int>>::size_type>(vertex)][i] && !visited[i]) {
+        for (size_t i = 0; i < adjacencyMatrix[static_cast<std::vector<std::vector<int>>::size_type>(vertex)].size(); ++i) {
+            if (adjacencyMatrix[static_cast<vector<std::vector<int>>::size_type>(vertex)][i]!=0 && !visited[i]) {
                 dfs(adjacencyMatrix, visited, static_cast<int>(i)); // Recursively visit adjacent vertices
             }
         }
     }
-    bool Algorithms::isConnected(const Graph& g) {
-        const std::vector<std::vector<int>>& adjacencyMatrix = g.getAdjacencyMatrix();
-        if (adjacencyMatrix.empty()) {
-            return false; // An empty graph is not connected
-        }
-        std::vector<bool> visited(adjacencyMatrix.size(), false);
-        dfs(adjacencyMatrix, visited, 0);
-        for (bool isVisited : visited) {
-            if (!isVisited) {
-                return false; // If any vertex is not visited, the graph is not connected
-            }
-        }
+    
+bool Algorithms::isConnected(const Graph& graph) {
+    const std::vector<std::vector<int>>& adjacencyMatrix = graph.getAdjacencyMatrix();
+    if (adjacencyMatrix.empty()) {
+        return false; // An empty graph is not connected
+    }
+    std::vector<bool> visited(adjacencyMatrix.size(), false);
+    dfs(adjacencyMatrix, visited, 0);
+
+    // Check if all vertices are visited using std::all_of()
+    if (std::all_of(visited.begin(), visited.end(), [](bool isVisited) { return isVisited; })) {
         return true; // If all vertices are visited, the graph is connected
-    }
-//    bool Algorithms::dfss(Graph& g, int u, std::vector<int>& parent, std::unordered_set<int>& visited, std::vector<int>& cycle) {
-//     visited.insert(u);
-//     const std::vector<int>& neighbors = g.neighbors(u);
-//     for (int v : neighbors) {
-//         if (visited.find(v) == visited.end()) {
-//            parent[static_cast<size_t>(v)] = u; // Convert v to size_type
-//             if (dfss(g, v, parent, visited, cycle)) {
-//                 return true;
-//             }
-//         } else if (parent[static_cast<std::size_t>(u)] != v && v != u) { // Convert u to size_type
-//             // Found a back edge
-//             int cur = u;
-//             while (cur != parent[static_cast<std::size_t>(v)]) { // Convert v to size_type
-//                 cycle.push_back(cur);
-//                 cur = parent[static_cast<std::size_t>(cur)];
-
-//             }
-//             cycle.push_back(parent[static_cast<std::size_t>(v)]);
-//             cycle.push_back(u);
-//             std::reverse(cycle.begin(), cycle.end());
-//             return true;
-//        } else if (parent[static_cast<std::size_t>(u)] == v) { // Handle self-loop
-//             // Skip self-loop and continue
-//             continue;
-//         }
-//     }
-//     return false;
-// }
-
-// std::pair<bool, std::vector<int>> Algorithms::isContainsCycle(Graph& g) {
-//     size_t n = static_cast<size_t>(g.size());// Use size_t for n
-//     std::vector<int> parent(n, -1);
-//     std::unordered_set<int> visited;
-//     std::vector<int> cycle;
-
-//     for (std::size_t i = 0; i < n; ++i) { // Use size_t for loop index
-//         if (visited.find(static_cast<int>(i)) == visited.end()) {
-//             if (dfss(g, static_cast<int>(i), parent, visited, cycle)) {
-//                 return std::make_pair(true, cycle); // Return early if cycle found
-//             }
-//         }
-//     }
-//     cycle.clear();
-//     return std::make_pair(false, cycle);
-// }
-// void Algorithms::printisContainsCycle(Graph& g) {
-//         auto result = isContainsCycle(g);
-//         bool hasCycle = result.first;
-//         std::vector<int> cycle = result.second;
-
-//         if (hasCycle) {
-//             std::cout << "The cycle is: ";
-//             for (std::size_t i = 0; i < cycle.size(); ++i) {
-//                 // Adjust the index value and skip negative indices
-//                 if (cycle[i] >= 0) {
-//                     std::cout << cycle[i];
-//                     if (i != cycle.size() - 1 && cycle[i] >= 0) {
-//                         std::cout << "->";
-//                     }
-//                 }
-//             }
-//             std::cout << std::endl;
-//         } else {
-//             std::cout << hasCycle << std::endl;
-//         }
-//     }
-// } // namespace
-
-
-bool Algorithms::dfss(Graph& graph, int u, std::vector<int>& parent,std::unordered_set<int>& visited, std::vector<int>& cycle) {
-        visited.insert(u);
-        std::vector<int> neighbors = graph.neighbors(u);
-        for (std::size_t v = 0; v < neighbors.size(); ++v) {
-                if (visited.find(static_cast<int>(v)) == visited.end()) {
-                    parent[static_cast<std::size_t>(v)] = u;
-                    if (dfss(graph, static_cast<int>(v), parent, visited, cycle)) {
-                        return true;
-                    }
-                } 
-                    else if (static_cast<std::size_t>(parent[static_cast<std::size_t>(u)]) != v &&  v != u){
-                    // Found a back edge
-                    int cur = u;
-                    while (cur != parent[static_cast<std::size_t>(v)]) {
-                        cycle.push_back(cur);
-                        cur = parent[static_cast<std::size_t>(cur)];
-
-                    }
-                    cycle.push_back(parent[static_cast<std::size_t>(v)]);
-                    cycle.push_back(u);
-                    std::reverse(cycle.begin(), cycle.end());
-                    return true;
-                }
-        }
-        return false;
-    }
-std::string Algorithms::shortestPath(Graph& graph, int start, int end) {
-
-        int n = graph.size();
-        std::vector<int> parent(static_cast<std::vector<int>::size_type>(n), -1);
-        std::vector<bool> visited(static_cast<std::vector<bool>::size_type>(n), false);
-
-        std::queue<int> q; // Queue for BFS
-
-        q.push(start);
-        visited[static_cast<std::vector<bool>::size_type>(start)] = true;
-
-        while (!q.empty()) {
-            int current = q.front();
-            q.pop();
-            if (current == end) {
-                std::vector<int> path;
-                while (current != -1) {
-                    path.push_back(current);
-                current = static_cast<int>(parent[static_cast<std::vector<int>::size_type>(current)]);
-                }
-                 std::reverse(path.begin(), path.end()); 
-                std::string result;
-                
-                for (const int& node : path) {
-                    result += std::to_string(node);
-                   if (&node != &path.back()) {
-                   result += "->";
-                       }
-                           }
-
-                return result;
-            }
-              for (int neighbor = 0; neighbor < n; ++neighbor) {
-                if (graph.neighbors(current)[static_cast<std::vector<int>::size_type>(neighbor)] != 0 && !visited[static_cast<std::vector<bool>::size_type>(neighbor)]) {
-                q.push(neighbor);
-                visited[static_cast<std::vector<bool>::size_type>(neighbor)] = true;
-                parent[static_cast<std::vector<int>::size_type>(neighbor)] = current;
-            }
-        }
-    }
-
-        // If no path found
+    } 
+        return false; // If any vertex is not visited, the graph is not connected
+}
+string Algorithms::shortestPath(Graph& graph, int start, int end) {
+    if(graph.size()==0){
         return "-1";
     }
+    size_t numOfVer = graph.size();
+    vector<int> dist(numOfVer, INT_MAX);
+     vector<int> predecessor(numOfVer, -1);
+    dist[(size_t)start] = 0;
+     vector<vector<int>> adjacencyMatrix = graph.getAdjMatrix();
+    for (size_t uar = 0; uar < numOfVer-1; ++uar) {
+     
+       for (size_t jar = 0; jar < numOfVer; jar++)
+        {
+            for (size_t kar = 0; kar < numOfVer; kar++)
+            {
+                if (adjacencyMatrix[jar][kar]!=0 && dist[jar] != INT_MAX && dist[jar] + adjacencyMatrix[jar][kar] < dist[kar])
+                {
+                    dist[kar] = dist[jar] + adjacencyMatrix[jar][kar];
+                    predecessor[kar] = static_cast<int>(jar);
+                }
+            }
+        }
+    }
+   
+      for (size_t jar = 0; jar < numOfVer; jar++)
+    {
+        for (size_t k = 0; k < numOfVer; k++)
+        {
+            if (adjacencyMatrix[jar][k]!=0 && dist[jar] != INT_MAX && dist[jar] + adjacencyMatrix[jar][k] < dist[k])
+            {
+                return "Negative cycle detected";
+            }
+        }
+    }
+       // If there is no path from start to end
+    if (dist[(size_t)end] == INT_MAX)
+    {
+        return "-1";
+    }
+                
+     string path = to_string(end);
+    for (size_t var = (size_t)end; var != start; var = (size_t)predecessor[var])
+    {
+        path = to_string((int)predecessor[var]) + "->" + path;
+    }
+
+    return path;
+            }
+
+
+
+
 std::string Algorithms::isBipartite(const Graph &g) {
     size_t numNodes = g.size();
+    vector<vector<int>> adjMatrix = g.getAdjacencyMatrix(); // supposed to point on the same matrix
+
+      if (g.isDirected())
+    {
+        for (size_t i = 0; i < numNodes; ++i)
+        {
+            for (size_t jar = 0; jar < numNodes; ++jar)
+            {
+                if (adjMatrix[i][jar] != 0 && adjMatrix[jar][i] == 0)
+                {
+                    adjMatrix[jar][i] = adjMatrix[i][jar];
+                }
+                else if (adjMatrix[i][jar] == 0 && adjMatrix[jar][i] != 0)
+                {
+                    adjMatrix[i][jar] = adjMatrix[jar][i];
+                }
+            }
+        }
+        
+    }
     vector<int> colorArr(numNodes, -1);
     std::vector<size_t> setA, setB;
 
@@ -223,140 +157,124 @@ std::string Algorithms::isBipartite(const Graph &g) {
     return result;
 }
 
-bool Algorithms::isCyclicUtil(size_t v, std::vector<bool>& visited, std::vector<bool>& recStack, std::vector<size_t >& parent, const Graph& g, std::vector<size_t >& cycle) {
+bool Algorithms::isCyclic(vector<bool>& visited,size_t v,  std::vector<bool>& stack, std::vector<size_t >& parent, const Graph& g, std::vector<size_t >& cyclePath) {
     visited[v] = true;
-    recStack[v] = true;
+    stack[v] = true;
     bool isDirected = g.isDirected();
-
     size_t numNodes = g.size();
     for (size_t i = 0; i < numNodes; i++) {
-        if (g.isEdge(v, i)) {  // Check if there is an edge from v to i
+        if (g.haveEdge(v, i)) {  // Check if there is an edge from v to i
             if (!visited[i]) {
                 parent[i] = v;
-                if (isCyclicUtil(i, visited, recStack, parent, g, cycle)) {
+                if (isCyclic(visited,i, stack, parent, g, cyclePath)) {
                     return true;
                 }
-            } else if ((isDirected && recStack[i]) || (!isDirected && recStack[i] && parent[v] != i)) {
+            } else if ((isDirected && stack[i]) || (!isDirected && stack[i] && parent[v] != i)) {
                 // If a cycle is detected, trace back to print the cycle
-                cycle.push_back(i);
+                cyclePath.push_back(i);
                 for (size_t p = v; p != i; p = parent[p]) {
-                    cycle.push_back(p);
+                    cyclePath.push_back(p);
                 }
-                cycle.push_back(i);  // Complete the cycle by adding the start node again
-                std::reverse(cycle.begin(), cycle.end());
+                cyclePath.push_back(i);  // Complete the cycle by adding the start node again
+                std::reverse(cyclePath.begin(), cyclePath.end());
 
                 // Print the cycle path
                 std::cout << "Cycle detected: ";
-                for (size_t j = 0; j < cycle.size(); j++) {
-                    std::cout << cycle[j];
-                    if (j < cycle.size() - 1) std::cout << " -> ";
+                for (size_t jar = 0; jar < cyclePath.size(); jar++) {
+                    std::cout << cyclePath[jar];
+                    if (jar < cyclePath.size() - 1) std::cout << " -> ";
                 }
                 std::cout << std::endl;
-
                 return true;
             }
         }
     }
 
-    recStack[v] = false;
+    stack[v] = false;
     return false;
 }
 bool Algorithms::isContainsCycle(const Graph& g) {
     size_t numNodes = g.size();
-    std::vector<bool> visited(numNodes, false);
-    std::vector<bool> recStack(numNodes, false);
-    std::vector<size_t > parent(numNodes, SIZE_MAX);
-    std::vector<size_t> cycle;  // To store the path of the cycle
+    vector<size_t > parent(numNodes, SIZE_MAX);
+    vector<size_t> cyclePath;  // To store the path of the cycle
+    vector<bool> visited(numNodes, false);
+    vector<bool> stack(numNodes, false);
+    
 
     for (size_t i = 0; i < numNodes; i++) {
         if (!visited[i]) {
-            if (isCyclicUtil(i, visited, recStack, parent, g, cycle)) {
+            if (isCyclic(visited,i,  stack, parent, g, cyclePath)) {
                 return true;
             }
         }
     }
     return false;
 }
+std::string Algorithms::negativeCycle(const Graph& g) {
+    size_t n = g.size();
+    std::vector<int> distance(n, INT_MAX);
+    std::vector<int> pred(n, -1);
+    int cycle_start = -1;
 
-bool Algorithms::bellmanFord(const Graph& g, std::vector<size_t>& dist) {
-    const auto& graph = g.getAdjacencyMatrix();
-    size_t V = graph.size();
-    std::vector<size_t> parent(V, SIZE_MAX); // Change to SIZE_MAX
-    for (size_t u = 0; u < V-1; ++u) {
-         vector<size_t> neighbors=g.getNeighbors(u);
-         for(size_t vertex:neighbors){
-            if (graph[u][vertex] != 0 && static_cast<long long>(dist[u]) + graph[u][vertex] < dist[vertex]) {
-                dist[vertex] = static_cast<size_t>(static_cast<long long>(dist[u]) + graph[u][vertex]);
-                parent[vertex] = u;
-            }
-        }
-    }
-      for (size_t u = 0; u < V; ++u) {
-        std::vector<size_t> neighbors = g.getNeighbors(u);
-        for (size_t vertex : neighbors) {
-             if (graph[u][vertex] != 0 && static_cast<long long>(dist[u]) + graph[u][vertex] < dist[vertex]) {
-                   return true;
+    // Assume the source vertex is 0, for checking the negative cycle we'll run bellman-ford from the first vertex
+    distance[0] = 0;
+
+    for (size_t i = 0; i < n; ++i) {
+        cycle_start = -1;
+        for (size_t u = 0; u < n; ++u) {
+            for (size_t v = 0; v < n; ++v) {
+                if (g.getAdjacencyMatrix()[u][v] != 0) {
+                    // relax the edge
+                    int new_distance = distance[u] + g.getAdjacencyMatrix()[u][v];
+                    if (new_distance < distance[v]) {
+                        distance[v] = new_distance;
+                        pred[v] = u;
+                        cycle_start = v;
+                    }
                 }
             }
         }
-    
-    return false;
-}
-//  size_t cycleStart = SIZE_MAX;
-//  for (size_t u = 0; u < V; ++u) {
-//         std::vector<size_t> neighbors = g.getNeighbors(u);
-//         for (size_t vertex : neighbors) {
-//             if (graph[u][vertex] != 0 && static_cast<long long>(dist[u]) + graph[u][vertex] < dist[vertex]) {
-//                 cycleStart = vertex;
-//                 break; // Exit the loop once a negative cycle is found
-//             }
-//         }
-//         if (cycleStart != SIZE_MAX)
-//             break; // Exit the outer loop once a negative cycle is found
-//     }
-
-//     if (cycleStart != SIZE_MAX) {
-//         // Trace back through the parent pointers to print the cycle vertices
-//         std::vector<int> cycle;
-//         size_t current = cycleStart;
-//         cycle.push_back(current); // Insert the current vertex into the set
-//         do {
-//             current = parent[current];
-//             // Add the current vertex to a temporary vector (optional)
-//             cycle.push_back(current);
-//           } while (current != SIZE_MAX && current != cycleStart);
-//         // Add the starting vertex only once at the end
-//         if (current != SIZE_MAX) {
-//         cycle.push_back(current);
-//         }
-//         // Print the vertices of the cycle
-//         std::cout << "Negative cycle vertices: ";
-//         for (auto vertex : cycle) {
-//             std::cout << vertex << " ";
-//         }
-//         std::cout << std::endl;
-
-//         return true; // Negative cycle found
-//     }
-
-//     // If no negative cycle found
-//     return false;
-// }
-
-
-void Algorithms::negativeCycle(const Graph& g) {
-    const auto& graph = g.getAdjacencyMatrix();
-    size_t V = graph.size();
-    std::vector<size_t> dist(V, INT_MAX);
-
-    // Start with vertex 0
-    dist[0] = 0;
-
-    if (!bellmanFord(g, dist)) {
-        std::cout << "No negative cycle found." << std::endl;
     }
-  else  std::cout << "Yes negative cycle found." << std::endl;
+
+       vector<int> cycle;
+    if (cycle_start != -1)
+    {
+        // We found a negative cycle
+        // Go n steps back to make sure we are in the cycle
+        int v = cycle_start;
+        for (size_t i = 0; i < n; ++i)
+        {
+            v = pred[(size_t)v];
+        }
+
+        // Add vertices to the cycle
+        for (int u = v;; u = pred[(size_t)u])
+        {
+            cycle.push_back(u);
+            if (u == v && cycle.size() > 1)
+            {
+                break;
+            }
+        }
+        reverse(cycle.begin(), cycle.end());
+    
+
+        // Print the cycle path
+        std::string cyclePath = "Cycle detected: ";
+        for (int i = cycle.size() - 1; i >= 0; --i)
+{
+            cyclePath += std::to_string(cycle[(size_t)i]);
+            if (i > 0) {
+                cyclePath += " -> ";
+            }
+        }
+        return cyclePath;
+    }
+
+    return "No negative cycle found.";
 }
+
+
 
 
 
