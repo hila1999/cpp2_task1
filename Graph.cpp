@@ -1,19 +1,24 @@
 #include <iostream>
 #include "Graph.hpp"
 using namespace ariel;
-    // void Graph::loadGraph(const std::vector<std::vector<int>>& graph) {
-    //     this->adjacencyMatrix = graph;
-    // }
-    void Graph::loadGraph(const std::vector<std::vector<int>>& graph) {
-    // Check if the graph is square
-    if (graph.size() != graph[0].size()&&graph.size()==0) {
-        throw std::invalid_argument("Invalid graph: The graph is not a square matrix.");
+ 
+    void Graph::loadGraph(const std::vector<std::vector<int>>& matrix) {
+    if (matrix.empty()) {
+        throw std::invalid_argument("The graph cannot be empty");
     }
-    this->adjacencyMatrix = graph;
+    // Check if the matrix is square
+    size_t size = matrix.size();
+    for (const auto& row : matrix) {
+        if (row.size() != size) {
+            throw std::invalid_argument("Invalid graph: The graph is not a square matrix.");
+        }
     }
-
+    
+    // If the matrix is square, load it into the adjacencyMatrix
+    this->adjacencyMatrix = matrix;
+}
     void Graph::printGraph() const {
-        int numVertices = adjacencyMatrix.size();
+unsigned int numVertices = static_cast<unsigned int>(adjacencyMatrix.size());
         int numEdges = 0;
         for (size_t i = 0; i < adjacencyMatrix.size(); ++i) {
             for (size_t j = 0; j < adjacencyMatrix.size(); ++j) {
@@ -50,17 +55,11 @@ std::vector<size_t> Graph::getNeighbors(size_t node) const {
     }
     return neighbors;
 }
-    const std::vector<int> Graph::neighbors(int vertex) {
-    static const std::vector<int> empty;
-    if (vertex < 0 || vertex >= static_cast<int>(adjacencyMatrix.size())) {
-        // Return an empty vector if the vertex index is out of bounds
-        return empty;
-    }
-    return adjacencyMatrix[static_cast<size_t>(vertex)];
-}
-
     size_t Graph::size() const {
         return adjacencyMatrix.size();
     }
-
+std::vector<std::vector<int>> Graph::getAdjMatrix()
+{
+    return this->adjacencyMatrix;
+}
 
