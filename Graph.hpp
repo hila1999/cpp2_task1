@@ -17,17 +17,18 @@ namespace ariel {
         Graph() {}
         Graph(const std::vector<std::vector<int>>& graph_data) : adjacencyMatrix(graph_data) {}
         std::vector<size_t> getNeighbors(size_t node) const;
-        const std::vector<int> neighbors(int vertex) ;
         size_t size() const;
-        void loadGraph(const std::vector<std::vector<int>>& graph);
+        void loadGraph(const std::vector<std::vector<int>>& matrix);
         void printGraph() const;
         bool isDirected() const;
         const std::vector<std::vector<int>>& getAdjacencyMatrix() const {
             return adjacencyMatrix;
         }
-        bool isEdge(size_t from, size_t to) const {
+        bool haveEdge(size_t from, size_t to) const {
             return adjacencyMatrix[from][to] != 0;
         }
+        
+        std::vector<std::vector<int>> getAdjMatrix();
     };
 } // namespace ariel
 
