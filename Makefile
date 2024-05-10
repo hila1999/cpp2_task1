@@ -8,7 +8,7 @@ SOURCES=Graph.cpp Algorithms.cpp  # TestCounter.cpp Test.cpp
 
 OBJECTS=$(subst .cpp,.o,$(SOURCES))
 
-run: demo
+run:  demo
 	./$^
 
 demo: Demo.o $(OBJECTS)
