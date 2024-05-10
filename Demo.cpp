@@ -48,7 +48,7 @@ int main()
     vector<vector<int>> graph3 = {
         {0, 1, 2, 0, 0},
         {1, 0, 3, 0, 0},
-        {0, 3, 0, 4, 0},
+        {2, 3, 0, 4, 0},
         {0, 0, 4, 0, 5},
         {0, 0, 0, 5, 0}};
     g.loadGraph(graph3); // Load the graph to the object.
@@ -74,11 +74,12 @@ int main()
     {
         cout << e.what() << endl; // Should print: "Invalid graph: The graph is not a square matrix."
     }
+
     
 
 vector<vector<int>> graph5 = {
         {0, 1, 2, 0, 0},
-        {1, 0, 3, 0, 0},
+        {1, 0, 3, 0, 0},//no negative cycle
         {2, 3, 0, 4, 0},
         {0, 0, 4, 0, 5},
         {0, 0, 0, 5, 0}};
@@ -86,25 +87,24 @@ vector<vector<int>> graph5 = {
     cout << Algorithms::isBipartite(g) << endl; 
 vector<vector<int>> graph10 = {{0, 1, 2}, {1, 0, -3}, {2, -20, 0}};
         g.loadGraph(graph10);
-        Algorithms::negativeCycle(g);
+cout << Algorithms::negativeCycle(g)<< endl; 
 vector<vector<int>> graph6 = {
         {0, -1, 4, 0, 0},
-        {0, 0, 3, 2, 2},
+        {0, 0, 3, 2, 2},//have negative cycle
         {0, 0, 0, 0, 0},
         {0, 1, 5, 0, 0},
-        {0, 0, 0, -3, 0}
+        {0, 0, 0, -10, 0}
 };
 g.loadGraph(graph6);
-Algorithms::negativeCycle(g);
+cout << Algorithms::negativeCycle(g)<< endl; 
 
 std::vector<std::vector<int>> negativeCycleGraph = {
-    {0, 1, 0, 0, 0},  // Edge from 0 to 1 with weight 1
-    {0, 0, -2, 0, 0}, // Edge from 1 to 2 with weight -2
-    {0, 0, 0, 3, 0},  // Edge from 2 to 3 with weight 3
-    {0, 0, 0, 0, -4}, // Edge from 3 to 4 with weight -4
+    {0, 1, 0, 0, 0},  
+    {0, 0, -2, 0, 0}, 
+    {0, 0, 0, 0, -4}, 
     {-5, 0, 0, 0, 0}
-};  // Edge from 4 to 0 with weight -5 (negative cycle)
+};  
 g.loadGraph(negativeCycleGraph);
-Algorithms::negativeCycle(g);
+cout << Algorithms::negativeCycle(g)<< endl; 
 }
 
