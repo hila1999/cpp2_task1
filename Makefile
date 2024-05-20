@@ -1,4 +1,3 @@
-//hila.shamir99@gmail.com  314906983
 
 #!make -f
 
@@ -10,7 +9,7 @@ SOURCES=Graph.cpp Algorithms.cpp  # TestCounter.cpp Test.cpp
 
 OBJECTS=$(subst .cpp,.o,$(SOURCES))
 
-run:  demo
+run:  demo test
 	./$^
 
 demo: Demo.o $(OBJECTS)
