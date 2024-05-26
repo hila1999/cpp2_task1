@@ -13,14 +13,12 @@ namespace ariel {
     private:
         std::vector<std::vector<int>> adjacencyMatrix;
          size_t vertices;
-        void check_same_size(const Graph& other) const;
 
     public:
         Graph() {}
         Graph(const std::vector<std::vector<int>>& graph_data) : adjacencyMatrix(graph_data) {}
         std::vector<size_t> getNeighbors(size_t node) const;
         size_t size() const;
-        size_t countEdges() const; // Declaration for countEdges function
         void loadGraph(const std::vector<std::vector<int>>& matrix);
         void printGraph() const;
         bool isDirected() const;
@@ -39,30 +37,7 @@ namespace ariel {
             return adjacencyMatrix[from][to] ;
         }
         
-         // Operators
-        Graph operator+(const Graph& other) const;
-        Graph& operator+=(const Graph& other);
-        Graph operator+() const;
-        Graph operator-(const Graph& other) const;
-        Graph& operator-=(const Graph& other);
-        Graph operator-() const;
-        // Comparison operators
-        bool operator==(const Graph& other) const;
-        bool operator!=(const Graph& other) const;
-        bool operator<(const Graph& other) const;//to inmplement
-        bool operator<=(const Graph& other) const;
-        bool operator>(const Graph& other) const;
-        bool operator>=(const Graph& other) const;
-        // Increment and decrement operators
-        Graph& operator++();    // Prefix increment
-        Graph operator++(int);  // Postfix increment
-        Graph& operator--();    // Prefix decrement
-        Graph operator--(int);  // Postfix decrement
-        Graph& operator*=(int scalar) ;
-        Graph operator*(const Graph& other) const;
-        Graph& operator/=(int scalar);
-        
-    friend std::ostream &operator<<(std::ostream &os, const Graph &graph);
+       
     };
 } // namespace ariel
 
